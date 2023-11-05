@@ -33,9 +33,8 @@ const submitHandler = event => {
    const forbiddenPattern = /[0-9]/; //3.3.1 Surandami visi skaiciai, jie tekste negalimi
    const patternMatch = forbiddenPattern.test(searchText);
    if (patternMatch) {
-      errorTextEl.textContent = 'Numbers are not allowed in the text';
+      errorTextEl.textContent = 'Your search may not contain numbers';
       errorEl.classList.add('error--visible');
-
       setTimeout(() => {
          errorEl.classList.remove('error--visible');
       }, 3000);
@@ -52,12 +51,13 @@ const submitHandler = event => {
 
    // 3.6 Gauti paieskos rezultatus:
    fetch(`https://bytegrad.com/course-assets/js/2/api/jobs?search=${searchText}`)
-      .then(res => {
-         if (!res.ok) { //Patikrinamas, kad jei status code nera ok, grazintu 'Problem'
-            console.log('Something went wrong!');
-            return;  // return reikalingas tam, kad jei aptinkama problema - sustabdytu f-ja
+      .then(response => {
+         if (!response.ok) {
+            console.log('Something went wrong');
+            return;
          }
-         return res.json();
+
+         return response.json();
       })
       .then(data => {
          // 3.7. Issitraukiami tik darbo elementai:
@@ -72,25 +72,25 @@ const submitHandler = event => {
          // 3.10 Atvaizduoti darbo elementus darbu paieskos sarase:
          jobItems.slice(0, 7).forEach(jobItem => {
             const newJobItemHTML = `
-            <li class="job-item">
-                <a class="job-item__link" href="${jobItem.id}">
-                    <div class="job-item__badge">${jobItem.badgeLetters}</div>
-                    <div class="job-item__middle">
-                        <h3 class="third-heading">${jobItem.title}</h3>
-                        <p class="job-item__company">${jobItem.company}</p>
-                        <div class="job-item__extras">
-                            <p class="job-item__extra"><i class="fa-solid fa-clock job-item__extra-icon"></i> ${jobItem.duration}</p>
-                            <p class="job-item__extra"><i class="fa-solid fa-money-bill job-item__extra-icon"></i> ${jobItem.salary}</p>
-                            <p class="job-item__extra"><i class="fa-solid fa-location-dot job-item__extra-icon"></i> ${jobItem.location}</p>
-                        </div>
-                    </div>
-                    <div class="job-item__right">
-                        <i class="fa-solid fa-bookmark job-item__bookmark-icon"></i>
-                        <time class="job-item__time">${jobItem.daysAgo}d</time>
-                    </div>
-                </a>
-            </li>
-        `;
+                    <li class="job-item">
+                        <a class="job-item__link" href="${jobItem.id}">
+                            <div class="job-item__badge">${jobItem.badgeLetters}</div>
+                            <div class="job-item__middle">
+                                <h3 class="third-heading">${jobItem.title}</h3>
+                                <p class="job-item__company">${jobItem.company}</p>
+                                <div class="job-item__extras">
+                                    <p class="job-item__extra"><i class="fa-solid fa-clock job-item__extra-icon"></i> ${jobItem.duration}</p>
+                                    <p class="job-item__extra"><i class="fa-solid fa-money-bill job-item__extra-icon"></i> ${jobItem.salary}</p>
+                                    <p class="job-item__extra"><i class="fa-solid fa-location-dot job-item__extra-icon"></i> ${jobItem.location}</p>
+                                </div>
+                            </div>
+                            <div class="job-item__right">
+                                <i class="fa-solid fa-bookmark job-item__bookmark-icon"></i>
+                                <time class="job-item__time">${jobItem.daysAgo}d</time>
+                            </div>
+                        </a>
+                    </li>
+                `;
             jobListSearchEl.insertAdjacentHTML('beforeend', newJobItemHTML);
          });
       })
@@ -104,6 +104,7 @@ searchFormEl.addEventListener('submit', submitHandler);
 
 // 4.1. Sukuriama clickHandler f-ja:
 const clickHandler = event => {
+   // prevent default behavior (navigation)
    event.preventDefault();
 
    // 4.2. Gauti paspausta darbo elementa:
@@ -127,12 +128,13 @@ const clickHandler = event => {
 
    // 4.8. Gauti darbo elemento duomenis:
    fetch(`https://bytegrad.com/course-assets/js/2/api/jobs/${id}`)
-      .then(res => {
-         if (!res.ok) {
-            console.log('Something went wrong!');
+      .then(response => {
+         if (!response.ok) {
+            console.log('Something went wrong');
             return;
          }
-         return res.json();
+
+         return response.json();
       })
       .then(data => {
          // 4.9. Isskleisti darbo elementa:
@@ -143,62 +145,62 @@ const clickHandler = event => {
 
          // Pateikiamas detalus darbo aprasymas:
          const jobDetailsHTML = `
-         <img src="${jobItem.coverImgURL}" alt="#" class="job-details__cover-img">
+                <img src="${jobItem.coverImgURL}" alt="#" class="job-details__cover-img">
 
-<a class="apply-btn" href="${jobItem.companyURL}" target="_blank">Apply <i class="fa-solid fa-square-arrow-up-right apply-btn__icon"></i></a>
+                <a class="apply-btn" href="${jobItem.companyURL}" target="_blank">Apply <i class="fa-solid fa-square-arrow-up-right apply-btn__icon"></i></a>
 
-<section class="job-info">
-    <div class="job-info__left">
-        <div class="job-info__badge">${jobItem.badgeLetters}</div>
-        <div class="job-info__below-badge">
-            <time class="job-info__time">${jobItem.daysAgo}d</time>
-            <button class="job-info__bookmark-btn">
-                <i class="fa-solid fa-bookmark job-info__bookmark-icon"></i>
-            </button>
-        </div>
-    </div>
-    <div class="job-info__right">
-        <h2 class="second-heading">${jobItem.title}</h2>
-        <p class="job-info__company">${jobItem.company}</p>
-        <p class="job-info__description">${jobItem.descrition}</p>
-        <div class="job-info__extras">
-            <p class="job-info__extra"><i class="fa-solid fa-clock job-info__extra-icon"></i> ${jobItem.duration}</p>
-            <p class="job-info__extra"><i class="fa-solid fa-money-bill job-info__extra-icon"></i> ${jobItem.salary}</p>
-            <p class="job-info__extra"><i class="fa-solid fa-location-dot job-info__extra-icon"></i> ${jobItem.location}</p>
-        </div>
-    </div>
-</section>
+                <section class="job-info">
+                    <div class="job-info__left">
+                        <div class="job-info__badge">${jobItem.badgeLetters}</div>
+                        <div class="job-info__below-badge">
+                            <time class="job-info__time">${jobItem.daysAgo}d</time>
+                            <button class="job-info__bookmark-btn">
+                                <i class="fa-solid fa-bookmark job-info__bookmark-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="job-info__right">
+                        <h2 class="second-heading">${jobItem.title}</h2>
+                        <p class="job-info__company">${jobItem.company}</p>
+                        <p class="job-info__description">${jobItem.description}</p>
+                        <div class="job-info__extras">
+                            <p class="job-info__extra"><i class="fa-solid fa-clock job-info__extra-icon"></i> ${jobItem.duration}</p>
+                            <p class="job-info__extra"><i class="fa-solid fa-money-bill job-info__extra-icon"></i> ${jobItem.salary}</p>
+                            <p class="job-info__extra"><i class="fa-solid fa-location-dot job-info__extra-icon"></i> ${jobItem.location}</p>
+                        </div>
+                    </div>
+                </section>
 
-<div class="job-details__other">
-    <section class="qualifications">
-        <div class="qualifications__left">
-            <h4 class="fourth-heading">Qualifications</h4>
-            <p class="qualifications__sub-text">Other qualifications may apply</p>
-        </div>
-        <ul class="qualifications__list">
-        ${jobItem.qualifications.map(qualificationText => `<li class='qualifications__item'>${qualificationText}</li>`).join('')}
-           
-        </ul>
-    </section>
+                <div class="job-details__other">
+                    <section class="qualifications">
+                        <div class="qualifications__left">
+                            <h4 class="fourth-heading">Qualifications</h4>
+                            <p class="qualifications__sub-text">Other qualifications may apply</p>
+                        </div>
+                        <ul class="qualifications__list">
+                            ${jobItem.qualifications.map(qualificationText => `<li class="qualifications__item">${qualificationText}</li>`).join('')}
+                        </ul>
+                    </section>
+                    
+                    <section class="reviews">
+                        <div class="reviews__left">
+                            <h4 class="fourth-heading">Company reviews</h4>
+                            <p class="reviews__sub-text">Recent things people are saying</p>
+                        </div>
+                        <ul class="reviews__list">
+                            ${jobItem.reviews.map(reviewText => `<li class="reviews__item">${reviewText}</li>`).join('')}
+                        </ul>
+                    </section>
+                </div>
 
-    <section class="reviews">
-        <div class="reviews__left">
-            <h4 class="fourth-heading">Company reviews</h4>
-            <p class="reviews__sub-text">Recent things people are saying</p>
-        </div>
-        <ul class="reviews__list">
-        ${jobItem.reviews.map(reviewText => `<li class='reviews__item'>${reviewText}</li>`).join('')}
-
-            
-        </ul>
-    </section>
-</div>
-         `;
-
+                <footer class="job-details__footer">
+                    <p class="job-details__footer-text">If possible, please reference that you found the job on <span class="u-bold">rmtDev</span>, we would really appreciate it!</p>
+                </footer>
+            `;
          jobDetailsContentEl.innerHTML = jobDetailsHTML;
       })
       .catch(error => console.log(error));
 };
 
 // 4. Iskvieciamas listeneris job listui:
-jobListSearchEl.addEventListener('cilck', clickHandler);
+jobListSearchEl.addEventListener('click', clickHandler);
