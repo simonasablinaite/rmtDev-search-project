@@ -1,7 +1,7 @@
 import {
-   jobListSearchEl,
-   jobDetailsContentEl,
-   spinnerJobDetailsEl
+    BASE_API_URL,
+    jobListSearchEl,
+    jobDetailsContentEl
 } from '../common.js';
 
 import renderSpinner from './Spinner.js';
@@ -10,47 +10,47 @@ import renderSpinner from './Spinner.js';
 
 // 4.1. Sukuriama clickHandler f-ja:
 const clickHandler = event => {
-   // prevent default behavior (navigation)
-   event.preventDefault();
+    // prevent default behavior (navigation)
+    event.preventDefault();
 
-   // 4.2. Gauti paspausta darbo elementa:
-   const jobItemEl = event.target.closest('.job-item');
+    // 4.2. Gauti paspausta darbo elementa:
+    const jobItemEl = event.target.closest('.job-item');
 
-   // 4.3. Pasalinti aktyvu uzdaryma is anksciau aktyvaus darbo elemento (patikrinama ar reiksme nelygi null):
-   // document.querySelector('.job-item--active') && document.querySelector('.job-item--active').classList.remove('.job-item--active');
-   document.querySelector('.job-item--active')?.classList.remove('.job-item--active');
+    // 4.3. Pasalinti aktyvu uzdaryma is anksciau aktyvaus darbo elemento (patikrinama ar reiksme nelygi null):
+    // document.querySelector('.job-item--active') && document.querySelector('.job-item--active').classList.remove('.job-item--active');
+    document.querySelector('.job-item--active')?.classList.remove('.job-item--active');
 
-   // 4.4. Pridedama active klase:
-   jobItemEl.classList.add('job-item--active');
+    // 4.4. Pridedama active klase:
+    jobItemEl.classList.add('job-item--active');
 
-   // 4.5. Isvaloma informacijos apie darbus sekcija:
-   jobDetailsContentEl.innerHTML = '';
+    // 4.5. Isvaloma informacijos apie darbus sekcija:
+    jobDetailsContentEl.innerHTML = '';
 
-   // 4.6. Paleidziamas suktis spineris:
-   renderSpinner('job-details');
+    // 4.6. Paleidziamas suktis spineris:
+    renderSpinner('job-details');
 
-   // 4.7. Gauti darbo ID:
-   const id = jobItemEl.children[0].getAttribute('href');
+    // 4.7. Gauti darbo ID:
+    const id = jobItemEl.children[0].getAttribute('href');
 
-   // 4.8. Gauti darbo elemento duomenis:
-   fetch(`https://bytegrad.com/course-assets/js/2/api/jobs/${id}`)
-      .then(response => {
-         if (!response.ok) {
-            console.log('Something went wrong');
-            return;
-         }
+    // 4.8. Gauti darbo elemento duomenis:
+    fetch(`${BASE_API_URL}/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                console.log('Something went wrong');
+                return;
+            }
 
-         return response.json();
-      })
-      .then(data => {
-         // 4.9. Isskleisti darbo elementa:
-         const { jobItem } = data;
+            return response.json();
+        })
+        .then(data => {
+            // 4.9. Isskleisti darbo elementa:
+            const { jobItem } = data;
 
-         // 4.10.Panaikinamas spineris:
-         renderSpinner('job-details');
+            // 4.10.Panaikinamas spineris:
+            renderSpinner('job-details');
 
-         // Pateikiamas detalus darbo aprasymas:
-         const jobDetailsHTML = `
+            // Pateikiamas detalus darbo aprasymas:
+            const jobDetailsHTML = `
                <img src="${jobItem.coverImgURL}" alt="#" class="job-details__cover-img">
 
                <a class="apply-btn" href="${jobItem.companyURL}" target="_blank">Apply <i class="fa-solid fa-square-arrow-up-right apply-btn__icon"></i></a>
@@ -103,9 +103,9 @@ const clickHandler = event => {
                    <p class="job-details__footer-text">If possible, please reference that you found the job on <span class="u-bold">rmtDev</span>, we would really appreciate it!</p>
                </footer>
            `;
-         jobDetailsContentEl.innerHTML = jobDetailsHTML;
-      })
-      .catch(error => console.log(error));
+            jobDetailsContentEl.innerHTML = jobDetailsHTML;
+        })
+        .catch(error => console.log(error));
 };
 
 // 4. Iskvieciamas listeneris job listui:
