@@ -1,10 +1,13 @@
 import {
    searchInputEl,
    searchFormEl,
-   spinnerSearchEl,
    jobListSearchEl,
    numberEl
 } from '../common.js';
+
+import renderError from './Error.js';
+import renderSpinner from './Spinner.js';
+
 
 // -- SEARCH COMPONENT --
 //3. Sukuriama submitHandler f-ja, kuri:
@@ -18,11 +21,8 @@ const submitHandler = event => {
    const forbiddenPattern = /[0-9]/; //3.3.1 Surandami visi skaiciai, jie tekste negalimi
    const patternMatch = forbiddenPattern.test(searchText);
    if (patternMatch) {
-      errorTextEl.textContent = 'Your search may not contain numbers';
-      errorEl.classList.add('error--visible');
-      setTimeout(() => {
-         errorEl.classList.remove('error--visible');
-      }, 3000);
+      renderError('Your search may not contain numbers');
+      return;
    }
 
    // 3.4 Uzblurinamas inputas:
@@ -32,7 +32,7 @@ const submitHandler = event => {
    jobListSearchEl.innerHTML = '';
 
    // 3.5 Spinerio parodymas:
-   spinnerSearchEl.classList.add('spinner--visible');
+   renderSpinner('search');
 
    // 3.6 Gauti paieskos rezultatus:
    fetch(`https://bytegrad.com/course-assets/js/2/api/jobs?search=${searchText}`)
@@ -49,7 +49,7 @@ const submitHandler = event => {
          const { jobItems } = data;
 
          // 3.8 Istrinamas spineris
-         spinnerSearchEl.classList.remove('spinner--visible');
+         renderSpinner('search');
 
          // 3.9 Pateikti rezultatu skaiciu:
          numberEl.textContent = jobItems.length;

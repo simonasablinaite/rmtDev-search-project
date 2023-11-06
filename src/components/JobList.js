@@ -4,6 +4,8 @@ import {
    spinnerJobDetailsEl
 } from '../common.js';
 
+import renderSpinner from './Spinner.js';
+
 // -- JOB LIST COMPONENT --
 
 // 4.1. Sukuriama clickHandler f-ja:
@@ -25,7 +27,7 @@ const clickHandler = event => {
    jobDetailsContentEl.innerHTML = '';
 
    // 4.6. Paleidziamas suktis spineris:
-   spinnerJobDetailsEl.classList.add('spinner--visible');
+   renderSpinner('job-details');
 
    // 4.7. Gauti darbo ID:
    const id = jobItemEl.children[0].getAttribute('href');
@@ -45,7 +47,7 @@ const clickHandler = event => {
          const { jobItem } = data;
 
          // 4.10.Panaikinamas spineris:
-         spinnerJobDetailsEl.classList.remove('spinner--visible');
+         renderSpinner('job-details');
 
          // Pateikiamas detalus darbo aprasymas:
          const jobDetailsHTML = `
