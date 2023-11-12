@@ -3,10 +3,12 @@
 // Konstantos:
 export const BASE_API_URL = 'https://bytegrad.com/course-assets/js/2/api/jobs';
 export const DEFAULT_DISPLAY_TIME = 3000;
+export const RESULTS_PER_PAGE = 7;
 
 // STATE
 export const state = {
-   searchJobItems: []
+   searchJobItems: [],
+   currentPage: 1
 };
 
 // 1. Paselektinami visi projektui reikalingi elementai:

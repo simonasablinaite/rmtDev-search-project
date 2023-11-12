@@ -1,6 +1,7 @@
 import {
     BASE_API_URL,
     state,
+    RESULTS_PER_PAGE,
     jobListSearchEl,
     jobDetailsContentEl,
     getData
@@ -21,7 +22,7 @@ const renderJobList = () => {
 
 
     // 3.10 Atvaizduoti darbo elementus darbu paieskos sarase:
-    state.searchJobItems.slice(0, 7).forEach(jobItem => {
+    state.searchJobItems.slice(state.currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE, state.currentPage * RESULTS_PER_PAGE).forEach(jobItem => {
         const newJobItemHTML = `
                <li class="job-item">
                    <a class="job-item__link" href="${jobItem.id}">

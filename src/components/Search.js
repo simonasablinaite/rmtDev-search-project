@@ -5,12 +5,15 @@ import {
    searchFormEl,
    jobListSearchEl,
    numberEl,
+   sortingBtnRecentEl,
+   sortingBtnRelevantEl,
    getData
 } from '../common.js';
 
 import renderError from './Error.js';
 import renderSpinner from './Spinner.js';
 import renderJobList from './JobList.js';
+import renderPaginationBtns from './Pagination.js';
 
 
 // -- SEARCH COMPONENT --
@@ -35,6 +38,9 @@ const submitHandler = async event => {
    // 3.11 Istrinti ankstesnius darbu elementu:
    jobListSearchEl.innerHTML = '';
 
+   // Nuresetinami rusiavimo mygtukai:
+   sortingBtnRecentEl.classList.remove('sorting__button--active');
+   sortingBtnRelevantEl.classList.add('sorting__button--active');
    // 3.5 Spinerio parodymas:
    renderSpinner('search');
 
@@ -47,12 +53,16 @@ const submitHandler = async event => {
 
       // 6. Atnaujinamas state (busena):
       state.searchJobItems = jobItems;
+      state.currentPage = 1;
 
       // 3.8 Istrinamas spineris
       renderSpinner('search');
 
       // 3.9 Pateikti rezultatu skaiciu:
       numberEl.textContent = jobItems.length;
+
+      // Nuresetinami puslapiavimo mygtukai:
+      renderPaginationBtns();
 
       // // 3.10 (refact) Atvaizduoti darbo elementus darbu paieskos sarase:
       renderJobList();

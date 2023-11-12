@@ -6,6 +6,7 @@ import {
 } from '../common.js';
 
 import renderJoblist from './JobList.js';
+import renderPaginationBtns from './Pagination.js';
 
 const clickHandler = event => {
    // 5. Gauti  paspausto mygtuko elementa:
@@ -13,6 +14,9 @@ const clickHandler = event => {
 
    //  5.1. Sustabdoma f-ja, jei mygtukas nepaspaudziamas:
    if (!clickedBtnEl) return;
+
+   // Nuresetinti iki pirmo puslapio:
+   state.currentPage = 1;
 
    // 5.2. Patikrinama ar rusiavimas buvo neseniai atliktas:
    const recent = clickedBtnEl.className.includes('--recent') ? true : false;
@@ -34,6 +38,10 @@ const clickHandler = event => {
          return b.relevanceScore - a.relevanceScore;
       });
    }
+
+   // Nuresetinamas puslapiavimas:
+   renderPaginationBtns();
+
    // 5.4. Pateikiami darbo elementai sarase:
    renderJoblist();
 };
