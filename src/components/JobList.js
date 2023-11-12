@@ -64,9 +64,8 @@ const clickHandler = event => {
     // 4.8. Gauti darbo elemento duomenis:
     fetch(`${BASE_API_URL}/${id}`)
         .then(response => {
-            if (!response.ok) {
-                console.log('Something went wrong');
-                return;
+            if (!response.ok) { // 4xx, 5xx status code
+                throw new Error('Resource issue (e.g. resource doesn\'t exist) or server issue');
             }
 
             return response.json();
@@ -82,7 +81,10 @@ const clickHandler = event => {
             renderJobDrtails(jobItem);
 
         })
-        .catch(error => console.log(error));
+        .catch(error => { // narsykles problemos arba kitos klaidos (pvz bandoma kazka isnagrineti kaip JSON, nors tai nera JSON)
+            renderSpinner('job-details');
+            renderError(error.message);
+        });
 };
 
 // 4. Iskvieciamas listeneris job listui:
