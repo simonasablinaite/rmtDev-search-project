@@ -8,7 +8,7 @@ import {
 } from '../common.js';
 
 import renderSpinner from './Spinner.js';
-import renderJobDrtails from './JobDetails.js';
+import renderJobDetails from './JobDetails.js';
 import renderError from './Error.js';
 
 // -- JOB LIST COMPONENT --
@@ -71,6 +71,9 @@ const clickHandler = async event => {
     // 4.7. Gauti darbo ID:
     const id = jobItemEl.children[0].getAttribute('href');
 
+    // Pridedamas ID prie URL:
+    history.pushState(null, '', `/#${id}`);
+
     // 4.8. Gauti darbo elemento duomenis:
     try {
         const data = await getData(`${BASE_API_URL}/jobs/${id}`);
@@ -82,7 +85,7 @@ const clickHandler = async event => {
         renderSpinner('job-details');
 
         // Pateikiamas detalus darbo aprasymas:
-        renderJobDrtails(jobItem);
+        renderJobDetails(jobItem);
 
     } catch (error) {
         renderSpinner('job-details');

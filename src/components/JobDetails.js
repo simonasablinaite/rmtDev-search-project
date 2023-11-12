@@ -1,8 +1,8 @@
 import { jobDetailsContentEl } from "../common.js";
 
 // (refact) Pateikiamas detalus darbo aprasymas:
-const renderJobDrtails = jobItem => {
-   const jobDetailsHTML = `
+const renderJobDetails = jobItem => {
+    const jobDetailsHTML = `
    <img src="${jobItem.coverImgURL}" alt="#" class="job-details__cover-img">
 
    <a class="apply-btn" href="${jobItem.companyURL}" target="_blank">Apply <i class="fa-solid fa-square-arrow-up-right apply-btn__icon"></i></a>
@@ -55,7 +55,7 @@ const renderJobDrtails = jobItem => {
        <p class="job-details__footer-text">If possible, please reference that you found the job on <span class="u-bold">rmtDev</span>, we would really appreciate it!</p>
    </footer>
 `;
-   jobDetailsContentEl.innerHTML = jobDetailsHTML;
+    jobDetailsContentEl.innerHTML = jobDetailsHTML;
 };
 
-export default renderJobDrtails;
+export default renderJobDetails;
