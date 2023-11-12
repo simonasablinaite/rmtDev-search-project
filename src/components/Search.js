@@ -1,5 +1,6 @@
 import {
    BASE_API_URL,
+   state,
    searchInputEl,
    searchFormEl,
    jobListSearchEl,
@@ -44,6 +45,9 @@ const submitHandler = async event => {
       // 3.7.Issitraukiami tik darbo elementai:
       const { jobItems } = data;
 
+      // 6. Atnaujinamas state (busena):
+      state.searchJobItems = jobItems;
+
       // 3.8 Istrinamas spineris
       renderSpinner('search');
 
@@ -51,7 +55,7 @@ const submitHandler = async event => {
       numberEl.textContent = jobItems.length;
 
       // // 3.10 (refact) Atvaizduoti darbo elementus darbu paieskos sarase:
-      renderJobList(jobItems);
+      renderJobList();
 
    } catch (error) { // narsykles problemos arba kitos klaidos (pvz bandoma kazka isnagrineti kaip JSON, nors tai nera JSON)
       renderSpinner('search');

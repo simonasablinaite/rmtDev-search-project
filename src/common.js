@@ -4,6 +4,11 @@
 export const BASE_API_URL = 'https://bytegrad.com/course-assets/js/2/api/jobs';
 export const DEFAULT_DISPLAY_TIME = 3000;
 
+// STATE
+export const state = {
+   searchJobItems: []
+};
+
 // 1. Paselektinami visi projektui reikalingi elementai:
 export const bookmarksBtnEl = document.querySelector('.bookmarks-btn');
 export const errorEl = document.querySelector('.error');

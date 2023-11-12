@@ -1,5 +1,6 @@
 import {
     BASE_API_URL,
+    state,
     jobListSearchEl,
     jobDetailsContentEl,
     getData
@@ -12,9 +13,9 @@ import renderError from './Error.js';
 // -- JOB LIST COMPONENT --
 
 // 4.11
-const renderJobList = jobItems => {
+const renderJobList = () => {
     // 3.10 Atvaizduoti darbo elementus darbu paieskos sarase:
-    jobItems.slice(0, 7).forEach(jobItem => {
+    state.searchJobItems.slice(0, 7).forEach(jobItem => {
         const newJobItemHTML = `
                <li class="job-item">
                    <a class="job-item__link" href="${jobItem.id}">
