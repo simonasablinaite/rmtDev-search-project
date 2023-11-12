@@ -2,10 +2,12 @@ import {
     BASE_API_URL,
     jobListSearchEl,
     jobDetailsContentEl,
+    getData
 } from '../common.js';
 
 import renderSpinner from './Spinner.js';
 import renderJobDrtails from './JobDetails.js';
+import renderError from './Error.js';
 
 // -- JOB LIST COMPONENT --
 
@@ -38,7 +40,7 @@ const renderJobList = jobItems => {
 }
 
 // 4.1. Sukuriama clickHandler f-ja:
-const clickHandler = event => {
+const clickHandler = async event => {
     // prevent default behavior (navigation)
     event.preventDefault();
 
@@ -62,29 +64,22 @@ const clickHandler = event => {
     const id = jobItemEl.children[0].getAttribute('href');
 
     // 4.8. Gauti darbo elemento duomenis:
-    fetch(`${BASE_API_URL}/${id}`)
-        .then(response => {
-            if (!response.ok) { // 4xx, 5xx status code
-                throw new Error('Resource issue (e.g. resource doesn\'t exist) or server issue');
-            }
+    try {
+        const data = await getData(`${BASE_API_URL}/jobs/${id}`);
 
-            return response.json();
-        })
-        .then(data => {
-            // 4.9. Isskleisti darbo elementa:
-            const { jobItem } = data;
+        // 4.9. Isskleisti darbo elementa:
+        const { jobItem } = data;
 
-            // 4.10.Panaikinamas spineris:
-            renderSpinner('job-details');
+        // 4.10.Panaikinamas spineris:
+        renderSpinner('job-details');
 
-            // Pateikiamas detalus darbo aprasymas:
-            renderJobDrtails(jobItem);
+        // Pateikiamas detalus darbo aprasymas:
+        renderJobDrtails(jobItem);
 
-        })
-        .catch(error => { // narsykles problemos arba kitos klaidos (pvz bandoma kazka isnagrineti kaip JSON, nors tai nera JSON)
-            renderSpinner('job-details');
-            renderError(error.message);
-        });
+    } catch (error) {
+        renderSpinner('job-details');
+        renderError(error.message);
+    };
 };
 
 // 4. Iskvieciamas listeneris job listui:

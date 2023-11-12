@@ -25,3 +25,14 @@ export const sortingBtnRelevantEl = document.querySelector('.sorting__button--re
 export const sortingBtnRecentEl = document.querySelector('.sorting__button--recent');
 export const spinnerSearchEl = document.querySelector('.spinner--search');
 export const spinnerJobDetailsEl = document.querySelector('.spinner--job-details');
+
+// HELPER / UTILITY FUNCTIONS:
+export const getData = async completeURL => {
+   const response = await fetch(completeURL);
+   const data = await response.json();
+
+   if (!response.ok) { // 4xx, 5xx status code
+      throw new Error(data.description);
+   }
+   return data;
+};
