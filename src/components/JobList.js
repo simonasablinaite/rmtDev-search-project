@@ -14,6 +14,12 @@ import renderError from './Error.js';
 
 // 4.11
 const renderJobList = () => {
+    // 5.5. Pasalinami ankstesni darbu elementai:
+    jobListSearchEl.innerHTML = '';
+
+    // 5.6. Atvaizduojami elementai:
+
+
     // 3.10 Atvaizduoti darbo elementus darbu paieskos sarase:
     state.searchJobItems.slice(0, 7).forEach(jobItem => {
         const newJobItemHTML = `
