@@ -42,4 +42,4 @@ const loadHandler = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', loadHandler);
-window.addEventListener('hashchange', loadHashChangeHandler);
+// window.addEventListener('hashchange', loadHashChangeHandler);

@@ -3,6 +3,7 @@ import {
     state,
     RESULTS_PER_PAGE,
     jobListSearchEl,
+    jobListBookmarksEl,
     jobDetailsContentEl,
     getData
 } from '../common.js';
@@ -14,15 +15,24 @@ import renderError from './Error.js';
 // -- JOB LIST COMPONENT --
 
 // 4.11
-const renderJobList = () => {
+const renderJobList = (whichJobList = 'search') => {
+    // Nustatyti tinkama darbu sarasa (paieskos rezultatu sarasas ar booksmarko sarasas):
+    const jobListEl = whichJobList === 'search' ? jobListSearchEl : jobListBookmarksEl;
+
     // 5.5. Pasalinami ankstesni darbu elementai:
-    jobListSearchEl.innerHTML = '';
+    jobListEl.innerHTML = '';
 
-    // 5.6. Atvaizduojami elementai:
+    //  Nustatyti tuos darbus, kurie turetu buti pateikti:
+    let jobItems;
 
+    if (whichJobList === 'search') {
+        jobItems = state.searchJobItems.slice(state.currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE, state.currentPage * RESULTS_PER_PAGE);
+    } else if (whichJobList === 'bookmarks') {
+        jobItems = state.bookmarkJobItems;
+    }
 
     // 3.10 Atvaizduoti darbo elementus darbu paieskos sarase:
-    state.searchJobItems.slice(state.currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE, state.currentPage * RESULTS_PER_PAGE).forEach(jobItem => {
+    jobItems.forEach(jobItem => {
         const newJobItemHTML = `
                <li class="job-item ${state.activeJobItem.id === jobItem.id ? 'job-item--active' : ''}">
                    <a class="job-item__link" href="${jobItem.id}">
@@ -43,7 +53,7 @@ const renderJobList = () => {
                    </a>
                </li>
            `;
-        jobListSearchEl.insertAdjacentHTML('beforeend', newJobItemHTML);
+        jobListEl.insertAdjacentHTML('beforeend', newJobItemHTML);
     });
 }
 
@@ -57,7 +67,7 @@ const clickHandler = async event => {
 
     // 4.3. Pasalinti aktyvu uzdaryma is anksciau aktyvaus darbo elemento (patikrinama ar reiksme nelygi null):
     // document.querySelector('.job-item--active') && document.querySelector('.job-item--active').classList.remove('.job-item--active');
-    document.querySelector('.job-item--active')?.classList.remove('.job-item--active');
+    document.querySelectorAll('.job-item--active').forEach(jobItemWithActivClass => jobItemWithActivClass.classList.remove('.job-item--active'));
 
     // 4.4. Pridedama active klase:
     jobItemEl.classList.add('job-item--active');
@@ -98,5 +108,6 @@ const clickHandler = async event => {
 
 // 4. Iskvieciamas listeneris job listui:
 jobListSearchEl.addEventListener('click', clickHandler);
+jobListBookmarksEl.addEventListener('click', clickHandler);
 
 export default renderJobList;
