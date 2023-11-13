@@ -22,6 +22,9 @@ const clickHandler = event => {
 
    // Atnaujinama zymos ikona:
    document.querySelector('.job-info__bookmark-icon').classList.toggle('job-info__bookmark-icon--bookmarked');
+
+   // Pateikti ieskomu darbu sarasa:
+   renderJobList();
 };
 
 const mouseEnterHandler = () => {

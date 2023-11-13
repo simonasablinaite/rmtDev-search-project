@@ -47,7 +47,7 @@ const renderJobList = (whichJobList = 'search') => {
                            </div>
                        </div>
                        <div class="job-item__right">
-                           <i class="fa-solid fa-bookmark job-item__bookmark-icon"></i>
+                           <i class="fa-solid fa-bookmark job-item__bookmark-icon ${state.bookmarkJobItems.some(bookmarkJobItem => bookmarkJobItem.id === jobItem.id) && 'job-item__bookmark-icon--bookmarked'}"></i>
                            <time class="job-item__time">${jobItem.daysAgo}d</time>
                        </div>
                    </a>
@@ -69,9 +69,6 @@ const clickHandler = async event => {
     // document.querySelector('.job-item--active') && document.querySelector('.job-item--active').classList.remove('.job-item--active');
     document.querySelectorAll('.job-item--active').forEach(jobItemWithActivClass => jobItemWithActivClass.classList.remove('.job-item--active'));
 
-    // 4.4. Pridedama active klase:
-    jobItemEl.classList.add('job-item--active');
-
     // 4.5. Isvaloma informacijos apie darbus sekcija:
     jobDetailsContentEl.innerHTML = '';
 
@@ -84,6 +81,9 @@ const clickHandler = async event => {
     // Atnaujinama būsena:
     const allJobItems = [...state.searchJobItems, ...state.bookmarkJobItems];
     state.activeJobItem = allJobItems.find(jobItem => jobItem.id === +id);
+
+    // Atvaizduojami paieskos laukelio darbai:
+    renderJobList();
 
     // Pridedamas ID prie URL:
     history.pushState(null, '', `/#${id}`);
