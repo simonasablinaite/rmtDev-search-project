@@ -1,10 +1,12 @@
 import {
    BASE_API_URL,
+   state,
    jobDetailsContentEl,
    getData
 } from '../common.js';
 import renderSpinner from './Spinner.js';
 import renderJobDetails from './JobDetails.js';
+import renderError from './Error.js';
 
 const loadHandler = async () => {
    // Gauti ID is URL adreso:
@@ -22,6 +24,9 @@ const loadHandler = async () => {
 
          // 4.9. Isskleisti darbo elementa:
          const { jobItem } = data;
+
+         // Busenos atnaujinimas:
+         state.activeJobItem = jobItem;
 
          // 4.10.Panaikinamas spineris:
          renderSpinner('job-details');

@@ -24,7 +24,7 @@ const renderJobList = () => {
     // 3.10 Atvaizduoti darbo elementus darbu paieskos sarase:
     state.searchJobItems.slice(state.currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE, state.currentPage * RESULTS_PER_PAGE).forEach(jobItem => {
         const newJobItemHTML = `
-               <li class="job-item">
+               <li class="job-item ${state.activeJobItem.id === jobItem.id ? 'job-item--active' : ''}">
                    <a class="job-item__link" href="${jobItem.id}">
                        <div class="job-item__badge">${jobItem.badgeLetters}</div>
                        <div class="job-item__middle">
@@ -70,6 +70,9 @@ const clickHandler = async event => {
 
     // 4.7. Gauti darbo ID:
     const id = jobItemEl.children[0].getAttribute('href');
+
+    // Atnaujinama būsena:
+    state.activeJobItem = state.searchJobItems.find(jobItem => jobItem.id === +id);
 
     // Pridedamas ID prie URL:
     history.pushState(null, '', `/#${id}`);
